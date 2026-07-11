@@ -1,0 +1,26 @@
+# ==============================================================================
+# REQUIREMENTS: Dependencias del Proyecto - Dashboard de Streaming
+# ==============================================================================
+# Este archivo especifica todas las librerías de Python necesarias para el 
+# correcto funcionamiento de la aplicación. Centraliza los paquetes requeridos 
+# para el desarrollo de la interfaz de usuario, la manipulación de estructuras 
+# de datos, la comunicación con servicios externos, la creación de gráficos 
+# interactivos y el procesamiento estadístico del modelo de Machine Learning.
+# ==============================================================================
+
+# Framework principal para la creación de la interfaz web y el dashboard interactivo
+streamlit
+
+# Librería fundamental para la manipulación, limpieza y análisis de datos mediante DataFrames
+pandas
+
+# Cliente HTTP para realizar peticiones y consumir los datos del modelo desde la API de ML
+requests
+
+# Librería para la generación de los gráficos dinámicos (PCA, codo, heatmaps, boxplots, etc.)
+plotly
+
+# Herramienta de Machine Learning utilizada en el dashboard para el escalado estadístico de variables
+scikit-learn
+
+matplotlib
