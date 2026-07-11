@@ -1,0 +1,27 @@
+# REQUIREMENTS.TXT - SERVICIO DE MACHINE LEARNING (ml-service)
+
+# PROPÓSITO DEL ARCHIVO:
+# Definir las dependencias exactas antes de escribir cualquier código. 
+# Esto asegura que el contenedor de Docker (o cualquier otro desarrollador) 
+# instale exactamente las mismas herramientas para trabajar, garantizando  
+# la reproducibilidad y evitando el clásico error de "en mi máquina sí funciona".
+
+
+# --- API REST (El Comunicador) ---
+fastapi             # Framework moderno y ultrarrápido para construir la API web.
+uvicorn             # Servidor que permite ejecutar y levantar la aplicación FastAPI.
+
+# --- Procesamiento de Datos y Matemáticas ---
+pandas              # Manipulación, limpieza y análisis de datos estructurados (DataFrames).
+numpy               # Operaciones matemáticas de alto rendimiento y manejo de arreglos.
+
+# --- Machine Learning (El Cerebro) ---
+scikit-learn        # Librería principal para modelos de ML (K-Means, PCA, Scaler).
+kneed               # Algoritmo matemático para automatizar la búsqueda del K óptimo (Método del Codo).
+
+# --- Base de Datos (La Conexión) ---
+sqlalchemy          # Herramienta ORM para manipular la base de datos usando código Python.
+psycopg2-binary     # Driver necesario para que Python logre comunicarse con PostgreSQL.
+
+# --- Pruebas y validación ---
+pytest              # Framework para pruebas unitarias del pipeline y la lógica de negocio.
