@@ -1,0 +1,75 @@
+# PROPÓSITO: Orquestación End-to-End del Proyecto de Ciencia de Datos
+#
+# JUSTIFICACIÓN EN EL PROYECTO:
+# Este archivo actúa como el "Director de Orquesta" de toda la arquitectura. 
+# Permite levantar el ecosistema completo (Base de Datos, Backend de ML y Frontend) 
+# de forma sincronizada usando un único comando (`docker compose up`). 
+# Su justificación principal es garantizar la reproducibilidad absoluta: asegura 
+# que cualquier profesor, evaluador o colega pueda ejecutar el proyecto sin 
+# sufrir el clásico problema de "en mi máquina sí funciona", aislando las 
+# dependencias de cada servicio.
+#
+# FUNCIONAMIENTO Y SERVICIOS:
+# 1. postgres (Database): Levanta un motor PostgreSQL 16. Utiliza volúmenes
+#    para inyectar un script SQL y un CSV al nacer, poblando la base de datos
+#    automáticamente sin intervención manual.
+#
+# 2. ml-service (Backend/ETL): Construye un entorno Python para extraer los
+#    datos, entrenar los modelos (K-Means, PCA) y levantar la API. Utiliza 
+#    `depends_on` para asegurar que no inicie hasta que la BD esté lista.
+#
+# 3. dashboard (Frontend): Construye la interfaz visual en Streamlit. Espera a 
+#    que el ml-service esté operativo para encenderse y evitar errores de conexión.
+#
+# VOLÚMENES CLAVE:
+# - modelos: Un volumen virtual compartido que permite que el `ml-service` guarde
+#   los algoritmos entrenados (.pkl) y el "dashboard" los consuma en tiempo real.
+
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: streaming_database
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: streaming_usuarios
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./database/perfil_usuarios.csv:/docker-entrypoint-initdb.d/perfil_usuarios.csv
+  
+  ml-service:
+    build:
+      context: ./ml-service
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - modelos:/app/models
+    depends_on:
+      postgres:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/').read()"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+  
+  dashboard:
+    build:
+      context: ./dashboard
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./data:/app/data
+      - modelos:/app/models
+    depends_on:
+      ml-service:
+        condition: service_healthy
+
+volumes:
+  modelos:
+
