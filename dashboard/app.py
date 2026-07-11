@@ -335,7 +335,7 @@ if not usuarios.empty:
 
     # MOTOR DE REGLAS DE NEGOCIO SEGURO
     st.markdown("---")
-    st.markdown("### Motor de Reglas Automatico y Acciones Comerciales")
+    st.markdown("### Perfiles identificados y acciones")
     resumen_clusters = []
     
     for cluster_id in sorted(usuarios["cluster"].unique()):
